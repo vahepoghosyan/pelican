@@ -48,7 +48,7 @@ export const publicRoutes = {
 
 export const privateRoutes = {
 	home: {
-		path: '/',
+		path: '/frontend',
 		children: props => <Home {...props} />
 	},
 	signIn: {
