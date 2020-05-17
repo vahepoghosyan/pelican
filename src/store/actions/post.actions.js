@@ -6,7 +6,7 @@ export const signIn = (store, body, history) => {
 		.then(res => {
 			localStorage.setItem('api_key', res.data.api_key);
 			localStorage.setItem('user_id', res.data.user_id);
-			history.push('/');
+			history.push('/frontend');
 			store.setState({ isUserLoggedIn: true, errorMessage: '' });
 		})
 		.catch(err => {
@@ -36,7 +36,7 @@ export const signUp = (store, body, history) => {
 				loader: false
 			});
 
-			history.push('/activation-code');
+			history.push('/frontend/activation-code');
 		})
 		.catch(err => {
 			store.setState({ errorMessage: err.response.data.message, loader: false });
@@ -48,7 +48,7 @@ export const activate = (store, body, history) => {
 		.post(`https://pelicanbrowser.com/webapi/activate`, body)
 		.then(res => {
 			if (res.status === 200) {
-				history.push('/');
+				history.push('/frontend');
 			}
 			store.setState({ errorMessage: '' });
 			// localStorage.setItem('token', res.data.response);

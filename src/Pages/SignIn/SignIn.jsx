@@ -64,7 +64,7 @@ function SignIn() {
 						required
 					/>
 					<Form.Control.Feedback type="invalid">Այս դաշտը չի կարող լինել դատարկ</Form.Control.Feedback>
-					<Link to="/forget-password">
+					<Link to="/frontend/forget-password">
 						<small>Գաղտնաբառի վերականգնում</small>
 					</Link>
 				</Form.Group>

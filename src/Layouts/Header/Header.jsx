@@ -27,7 +27,7 @@ export default function ButtonAppBar() {
 		<Container>
 			<Row className="justify-content-space-between align-items-center pt-3 pb-3">
 				<Col xs={2}>
-					<Link to="/">
+					<Link to="/frontend">
 						<img src="/assets/img/pelican.png" className="mw-100" alt="logo" />
 					</Link>
 				</Col>
@@ -37,12 +37,12 @@ export default function ButtonAppBar() {
 							{isUserLoggedIn ? (
 								<Nav activeKey="/home">
 									<Nav.Item>
-										<Nav.Link as={Link} to="/">
+										<Nav.Link as={Link} to="/frontend">
 											Դրամապանակ
 										</Nav.Link>
 									</Nav.Item>
 									<Nav.Item>
-										<Nav.Link as={Link} to="/withdrawal-history">
+										<Nav.Link as={Link} to="/frontend/withdrawal-history">
 											Գործարքներ
 										</Nav.Link>
 									</Nav.Item>
@@ -61,10 +61,10 @@ export default function ButtonAppBar() {
 							</h6>
 							{!isUserLoggedIn ? (
 								<>
-									<Link to="/sign-in" className="ml-3">
+									<Link to="/frontend/sign-in" className="ml-3">
 										<Button variant="outline-primary">Մուտք</Button>
 									</Link>
-									<Link to="/sign-up" className="ml-3">
+									<Link to="/frontend/sign-up" className="ml-3">
 										<Button>Գրանցվել</Button>
 									</Link>
 								</>

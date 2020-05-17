@@ -21,27 +21,27 @@ const history = createBrowserHistory();
 
 export const publicRoutes = {
 	home: {
-		path: '/',
+		path: '/frontend',
 		children: props => <Home {...props} />
 	},
 	signIn: {
-		path: '/sign-in',
+		path: '/frontend/sign-in',
 		children: props => <SignIn {...props} />
 	},
 	signUp: {
-		path: '/sign-up',
+		path: '/frontend/sign-up',
 		children: props => <SignUp {...props} />
 	},
 	withdrawalHistory: {
-		path: '/withdrawal-history',
+		path: '/frontend/withdrawal-history',
 		children: props => <WithdrawalHistory {...props} />
 	},
 	forgetPassword: {
-		path: '/forget-password',
+		path: '/frontend/forget-password',
 		children: props => <ForgetPassword {...props} />
 	},
 	notFound: {
-		path: '/',
+		path: '/frontend/',
 		render: props => <NotFound {...props} />
 	}
 };
@@ -52,15 +52,15 @@ export const privateRoutes = {
 		children: props => <Home {...props} />
 	},
 	signIn: {
-		path: '/sign-in',
+		path: '/frontend/sign-in',
 		children: props => <SignIn {...props} />
 	},
 	signUp: {
-		path: '/sign-up',
+		path: '/frontend/sign-up',
 		children: props => <SignUp {...props} />
 	},
 	activationCode: {
-		path: '/activation-code',
+		path: '/frontend/activation-code',
 		children: props => <ActivationCode {...props} />
 	},
 	// settings: {
@@ -68,15 +68,15 @@ export const privateRoutes = {
 	// 	children: props => <Settings {...props} />
 	// },
 	withdrawalHistory: {
-		path: '/withdrawal-history',
+		path: '/frontend/withdrawal-history',
 		children: props => <WithdrawalHistory {...props} />
 	},
 	forgetPassword: {
-		path: '/forget-password',
+		path: '/frontend/forget-password',
 		children: props => <ForgetPassword {...props} />
 	},
 	notFound: {
-		path: '/',
+		path: '/frontend/',
 		render: props => <NotFound {...props} />
 	}
 };
