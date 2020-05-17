@@ -1,0 +1,53 @@
+$primary: #ef4050;
+$secondary: #f94c01;
+$info: #6c757d;
+$link-color: $secondary;
+$input-btn-focus-box-shadow: none;
+$input-btn-focus-width: 0;
+
+$primary-gradient: linear-gradient(90deg, $primary, $secondary);
+
+$border-radius: 0;
+$font-family-base: 'Montserrat', sans-serif;
+
+@import '~bootstrap-scss/bootstrap';
+
+.custom-select {
+	-webkit-appearance: none;
+	&.is-invalid {
+		border-color: $danger !important;
+		padding-right: calc(0.75em + 2.3125rem) !important;
+		background: $form-feedback-icon-invalid !important;
+	}
+}
+
+.btn {
+	&:not([disabled]):hover {
+		opacity: 0.9;
+	}
+}
+
+.btn-primary {
+	background-image: $primary-gradient;
+	border-color: transparent;
+
+	&:hover {
+		border-color: transparent;
+	}
+}
+
+.btn-outline-primary {
+	&:hover {
+		background-image: $primary-gradient;
+	}
+}
+
+.progress {
+	height: 2.5rem;
+}
+
+.justify-content-between {
+	&:last-of-type {
+		border: none;
+	}
+}

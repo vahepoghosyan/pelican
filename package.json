@@ -1,0 +1,52 @@
+{
+  "name": "pelican",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Vahe Poghosyan",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server --progress",
+    "build": "webpack --mode production --progress",
+    "production": "webpack-dev-server --mode production --progress --host 0.0.0.0",
+    "prestart": "yarn install --prefer-offline --frozen-lockfile",
+    "prebuild": "yarn install --prefer-offline --frozen-lockfile",
+    "preproduction": "yarn install --prefer-offline --frozen-lockfile"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "bootstrap-scss": "^4.4.1",
+    "core-js": "^3.4.0",
+    "history": "^4.10.1",
+    "react": "^16.10.2",
+    "react-bootstrap": "^1.0.1",
+    "react-dom": "^16.10.2",
+    "react-router-dom": "^5.1.2",
+    "use-global-hook": "^0.1.11",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.5",
+    "css-loader": "^3.2.0",
+    "file-loader": "4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "imagemin-webpack-plugin": "^2.4.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.12.0",
+    "postcss-loader": "^3.0.0",
+    "prettier": "^1.19.1",
+    "react-transition-group": "4.0.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "script-ext-html-webpack-plugin": "^2.1.4",
+    "styled-components": "^4.4.0",
+    "svg-react-loader": "^0.4.6",
+    "webpack": "^4.41.1",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2"
+  }
+}
