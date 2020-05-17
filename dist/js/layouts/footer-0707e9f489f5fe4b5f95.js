@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{84:function(n,e,t){"use strict";t.r(e),t.d(e,"default",(function(){return u}));var o=t(4),r=t.n(o);function u(){return r.a.createElement("div",null,"Footer")}}}]);
+//# sourceMappingURL=footer-0707e9f489f5fe4b5f95.js.map

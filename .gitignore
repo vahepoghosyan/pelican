@@ -64,7 +64,6 @@ typings/
 .vscode
 
 #other
-dist
 #temp
 
 # macOS
