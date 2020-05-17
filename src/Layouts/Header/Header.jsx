@@ -28,7 +28,7 @@ export default function ButtonAppBar() {
 			<Row className="justify-content-space-between align-items-center pt-3 pb-3">
 				<Col xs={2}>
 					<Link to="/">
-						<img src="assets/img/pelican.png" className="mw-100" alt="logo" />
+						<img src="/assets/img/pelican.png" className="mw-100" alt="logo" />
 					</Link>
 				</Col>
 				<Col className="text-right">
