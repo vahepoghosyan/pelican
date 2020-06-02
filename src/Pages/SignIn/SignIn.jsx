@@ -34,12 +34,14 @@ function SignIn() {
 		}
 	};
 
-	useEffect(() => {
-		errorMessage !== '' && setValidated(false);
-	}, [errorMessage]);
+	// useEffect(() => {
+	// 	errorMessage !== '' && setValidated(false);
+	// }, [errorMessage]);
+
+	// TODO signin validation
 
 	return (
-		<>
+		<Col md={6}>
 			<h3 className="text-center mb-5">Մուտք գործել</h3>
 			{errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 			<Form validated={validated}>
@@ -72,7 +74,7 @@ function SignIn() {
 					Մուտք
 				</Button>
 			</Form>
-		</>
+		</Col>
 	);
 }
 

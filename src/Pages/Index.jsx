@@ -1,10 +1,13 @@
 // VENDORS
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
+
+import { hot } from 'react-hot-loader';
+
 import ReactDOM from 'react-dom';
 
-import { Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import { history, publicRoutes, privateRoutes } from 'Pages/routes';
+import { publicRoutes, privateRoutes } from 'Pages/routes';
 
 import { useGlobal } from '../store';
 
@@ -13,12 +16,28 @@ import './index.scss';
 import { Layout } from 'Layouts';
 
 function Index() {
-	const [{ isUserLoggedIn }] = useGlobal();
+	const [
+		{ isUserLoggedIn },
+		{
+			post: { getWallet }
+		}
+	] = useGlobal();
 
 	const ROUTES = isUserLoggedIn ? privateRoutes : publicRoutes;
 
+	useEffect(() => {
+		// getWallet(
+		// 	{
+		// 		temptoken: localStorage.getItem('temptoken'),
+		// 		api_key: localStorage.getItem('api_key'),
+		// 		userId: localStorage.getItem('user_id')
+		// 	},
+		// 	history
+		// );
+	}, []); // TODO remove before build
+
 	return (
-		<Router history={history}>
+		<BrowserRouter>
 			<Layout>
 				<Switch>
 					{Object.entries(ROUTES).map(([routeKey, routeSettings]) => (
@@ -26,14 +45,22 @@ function Index() {
 					))}
 				</Switch>
 			</Layout>
-		</Router>
+		</BrowserRouter>
 	);
+}
+
+const AppHot = hot(module)(Index);
+
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+	window.addEventListener('message', e => {
+		console.clear();
+	});
 }
 
 export default () => {
 	ReactDOM.render(
 		<Suspense fallback={null}>
-			<Index />
+			<AppHot />
 		</Suspense>,
 		document.getElementById('root')
 	);

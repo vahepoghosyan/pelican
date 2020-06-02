@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin');
 const here = dir => (dir ? path.resolve(__dirname, dir) : __dirname);
 const dirs = {
 	src: './src',
@@ -75,7 +76,15 @@ module.exports = (env, args = {}) => {
 					test: /\.s[ac]ss$/i,
 					use: [
 						// Creates `style` nodes from JS strings
-						MiniCssExtractPlugin.loader,
+						{
+							loader: MiniCssExtractPlugin.loader,
+							options: {
+								// only enable hot in development
+								hmr: mode === 'development',
+								// if hmr does not work, this is a forceful method.
+								reloadAll: true,
+							},
+						},
 						// Translates CSS into CommonJS
 						{
 							loader: 'css-loader',
@@ -138,7 +147,8 @@ module.exports = (env, args = {}) => {
 				inline: isProduction && ['runtime'],
 				defaultAttribute: 'defer'
 			}),
-			new MiniCssExtractPlugin()
+			new MiniCssExtractPlugin(),
+			new HotModuleReplacementPlugin()
 		],
 		optimization: {
 			runtimeChunk: 'single',
@@ -198,8 +208,9 @@ module.exports = (env, args = {}) => {
 			// 		target: 'https://pelicanbrowser.com',
 			// 	}
 			// },
-            // https: true,
+			// https: true,
 			port: 8989,
+			hot: true,
 			compress: true,
 			writeToDisk: true,
 			historyApiFallback: true,

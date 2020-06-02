@@ -1,139 +1,230 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Form, Button, Col, Row, Alert } from 'react-bootstrap';
+import { Form, Button, Col, Row, Alert, Spinner } from 'react-bootstrap';
 
 import { useHistory, Redirect } from 'react-router-dom';
 
 import { useGlobal } from '../../store';
 
-function SignUp() {
+function SignUp({
+	isSignUpPage,
+	balanceToWithdraw,
+	serviceIdentificatorType = 1,
+	serviceIdentificator,
+	isChecked,
+	paymentDay
+}) {
 	const history = useHistory();
 
-	const [email, setEmail] = useState('vahitman47@gmail.com');
-	const [phoneCode, setPhoneCode] = useState(0);
-	const [phone, setPhone] = useState('095464229');
-	const [password, setPassword] = useState('qweqwe');
-	const [validated, setValidated] = useState(false);
-	// const [isSelectInvalid, setIsSelectInvalid] = useState(false);
+	const [phone, setPhone] = useState({
+		value: '',
+		isInvalid: false,
+		isValid: false,
+		inValidMessage: ''
+	});
+	const [email, setEmail] = useState({
+		value: '',
+		isInvalid: false,
+		isValid: false,
+		inValidMessage: ''
+	});
+	const [password, setPassword] = useState({
+		value: '',
+		isInvalid: false,
+		isValid: false,
+		inValidMessage: ''
+	});
+
+	const [isInValidForm, setIsInValidForm] = useState(false);
 
 	const [
-		{ errorMessage },
+		{ errorMessage, loader },
 		{
 			post: { signUp }
 		}
 	] = useGlobal();
 
-	const handlePhone = event => {
-		let reg = /^[0-9]*$/;
+	// useEffect(() => {
+	//
+	// }, []);
 
-		// if (phone.length === 0 && event.target.value !== 0) {
-		// 	event.preventDefault();
-		// 	console.log(123);
-		// }
+	const handlePhoneChange = event => {
+		let value = event.target.value;
 
-		if (
-			reg.test(event.target.value) &&
-			event.target.value.length <= 9 &&
-			!(phone.length === 0 && event.target.value !== '0')
-		) {
-			setPhone(event.target.value);
+		value = value.replace(/[^\d]/g, '').replace(/^0{2,}/, '0');
+
+		if (value === '') {
+			value = '';
 		} else {
-			event.preventDefault();
+			if (value[0] !== '0') {
+				value = '0' + value;
+			}
+
+			value = value.substr(0, 9);
 		}
+
+		const isValid = value.length === 9;
+
+		setPhone({
+			...phone,
+			value,
+			isInvalid: false,
+			isValid
+		});
+
+		setIsInValidForm(!(isValid && email.isValid && password.isValid));
+	};
+
+	const handlePhoneBlur = event => {
+		if (phone.value.length < 9) {
+			setPhone({ ...phone, inValidMessage: 'Դաշտը պետք է պարունակի 9 թիվ', isInvalid: true });
+		}
+	};
+
+	const handleEmailChange = ({ target }) => {
+		const { value } = target;
+		const regEmail = /^[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,}$/i;
+
+		const isValid = regEmail.test(value);
+
+		setEmail({ ...email, value, isInvalid: false, isValid });
+
+		setIsInValidForm(!(phone.isValid && isValid && password.isValid));
+	};
+
+	const handleEmailBlur = ({ target }) => {
+		const { value } = target;
+		const regEmail = /^[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,}$/i;
+
+		!regEmail.test(value) &&
+			setEmail({ ...email, isInvalid: true, inValidMessage: 'Դաշտը պետք է պարունակի վավեր էլ. հասցե' });
+	};
+
+	const handlePasswordChange = ({ target }) => {
+		const { value } = target;
+
+		const isValid = value.length >= 4;
+
+		setPassword({ ...email, value, isInvalid: false, isValid });
+
+		setIsInValidForm(!(phone.isValid && email.isValid && isValid));
+	};
+
+	const handlePasswordBlur = ({ target }) => {
+		const { value } = target;
+
+		value.length < 4 &&
+			setPassword({ ...email, isInvalid: true, inValidMessage: 'Դաշտը պետք է պարունակի առնվազն 4 նիշ' });
 	};
 
 	const handleSignUp = event => {
-		if (email === '' || phone === '' || phone.length < 9 || password === '') {
-			setValidated(true);
-			// setIsSelectInvalid(true);
-		} else {
-		    signUp(
+		if (isSignUpPage) {
+			signUp(
 				{
-                    phone,
-					password,
-					email,
-
+					phone: phone.value,
+					email: email.value,
+					password: password.value,
+					temptoken: localStorage.getItem('temptoken')
 				},
-				history
-			)
+				history,
+				true
+			);
+		} else {
+			signUp(
+				{
+					phone: phone.value,
+					email: email.value,
+					password: password.value,
+					temptoken: localStorage.getItem('temptoken'),
+					serviceIdentificator: serviceIdentificator.value,
+					serviceIdentificatorType,
+					balanceToWithdraw
+				},
+				history,
+				false
+			);
 		}
 	};
 
+	if (loader) {
+		return (
+			<div className="d-flex justify-content-center align-items-center pt-5 pb-5 spinner">
+				<Spinner animation="border" variant="primary" />
+			</div>
+		);
+	}
+
 	return (
-		<>
-			<h3 className="text-center mb-5">Գրանցվել</h3>
+		<Col md={7}>
+			{isSignUpPage ? (
+				<h3 className="text-center mb-5">Գրանցվել</h3>
+			) : (
+				<h5 className="text-center mb-4">Մուտքագրեք Ձեր հեռախոսահամարը և էլ. հասցեն</h5>
+			)}
 
 			{errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
 
-			<Form validated={validated}>
-				{/*<Form.Row className="no-gutters">*/}
-				{/*<Form.Group as={Col} xs={3}>*/}
-				{/*	<Form.Label className="font-weight-bold">Հեռխոս</Form.Label>*/}
-				{/*	<Form.Control*/}
-				{/*		as="select"*/}
-				{/*		custom*/}
-				{/*		required*/}
-				{/*		defaultValue={0}*/}
-				{/*		onChange={event => setPhoneCode(event.target.value)}*/}
-				{/*		isInvalid={isSelectInvalid}>*/}
-				{/*		<option value={0} disabled>*/}
-				{/*			Ընտրեք*/}
-				{/*		</option>*/}
-				{/*		<option>033</option>*/}
-				{/*		<option>041</option>*/}
-				{/*		<option>043</option>*/}
-				{/*		<option>055</option>*/}
-				{/*		<option>077</option>*/}
-				{/*		<option>091</option>*/}
-				{/*		<option>093</option>*/}
-				{/*		<option>094</option>*/}
-				{/*		<option>095</option>*/}
-				{/*	</Form.Control>*/}
-				{/*	<Form.Control.Feedback type="invalid">*/}
-				{/*		Ընտրեք կոդը*/}
-				{/*	</Form.Control.Feedback>*/}
-				{/*</Form.Group>*/}
+			<Form>
 				<Form.Group>
 					<Form.Label className="font-weight-bold">Հեռխոս</Form.Label>
 					<Form.Control
 						type="text"
 						placeholder="Օրինակ 095 123 123"
-						value={phone}
-						onChange={handlePhone}
-						required
+						value={phone.value}
+						maxLength={9}
+						onChange={handlePhoneChange}
+						onBlur={handlePhoneBlur}
+						isInvalid={phone.isInvalid}
+						isValid={phone.isValid}
 					/>
-					<Form.Control.Feedback type="invalid">Այս դաշտը չի կարող լինել դատարկ</Form.Control.Feedback>
+					<Form.Control.Feedback type="invalid">{phone.inValidMessage}</Form.Control.Feedback>
 				</Form.Group>
-				{/*</Form.Row>*/}
-
 				<Form.Group>
 					<Form.Label className="font-weight-bold">Էլ. հասցե</Form.Label>
 					<Form.Control
 						type="text"
-						placeholder="Էլ. հասցե"
-						value={email}
-						onChange={event => setEmail(event.target.value)}
-						required
+						placeholder="Օրինակ՝ name@example.com"
+						value={email.value}
+						onChange={handleEmailChange}
+						onBlur={handleEmailBlur}
+						isInvalid={email.isInvalid}
+						isValid={email.isValid}
 					/>
-					<Form.Control.Feedback type="invalid">Այս դաշտը չի կարող լինել դատարկ</Form.Control.Feedback>
+					<Form.Control.Feedback type="invalid">{email.inValidMessage}</Form.Control.Feedback>
 				</Form.Group>
+				{/*TODO Birth input and validation*/}
+				{/*<Form.Group>*/}
+				{/*	<Form.Label className="font-weight-bold">Էլ. հասցե</Form.Label>*/}
+				{/*	<Form.Control*/}
+				{/*		type="date"*/}
+				{/*		placeholder="Օրինակ name@example.com"*/}
+				{/*		value={email.value}*/}
+				{/*		onChange={handleEmailChange}*/}
+				{/*		onBlur={handleEmailBlur}*/}
+				{/*		isInvalid={email.isInvalid}*/}
+				{/*		isValid={email.isValid}*/}
+				{/*	/>*/}
+				{/*	<Form.Control.Feedback type="invalid">{email.inValidMessage}</Form.Control.Feedback>*/}
+				{/*</Form.Group>*/}
 				<Form.Group>
 					<Form.Label className="font-weight-bold">Գաղտնաբառ</Form.Label>
 					<Form.Control
 						type="password"
-						placeholder="Գաղտնաբառ"
-						value={password}
-						onChange={event => setPassword(event.target.value)}
-						required
+						placeholder="••••••••"
+						value={password.value}
+						onChange={handlePasswordChange}
+						onBlur={handlePasswordBlur}
+						isInvalid={password.isInvalid}
+						isValid={password.isValid}
 					/>
-					<Form.Control.Feedback type="invalid">Այս դաշտը չի կարող լինել դատարկ</Form.Control.Feedback>
+					<Form.Control.Feedback type="invalid">{password.inValidMessage}</Form.Control.Feedback>
 				</Form.Group>
 
-				<Button variant="primary" block onClick={handleSignUp}>
-					Գրանցվել
+				<Button variant="primary" disabled={isInValidForm} block onClick={handleSignUp}>
+					{isSignUpPage ? 'Գրանցվել' : 'Նվազեցնել պարտքը ' + balanceToWithdraw + '֏-ով'}
 				</Button>
 			</Form>
-		</>
+		</Col>
 	);
 }
 

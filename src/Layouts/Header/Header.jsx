@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 
 import { Link, useHistory } from 'react-router-dom';
 
-import { Button, Container, Row, Col, Nav } from 'react-bootstrap';
+import { Button, Container, Row, Col, Nav, Dropdown } from 'react-bootstrap';
 
 // COMPONENTS
 
 import { useGlobal } from '../../store';
 
-export default function ButtonAppBar() {
+export default function Header() {
 	const history = useHistory();
 
 	const [
@@ -19,7 +19,7 @@ export default function ButtonAppBar() {
 		}
 	] = useGlobal();
 
-	const handleLogout = event => {
+	const handleSignOutClick = event => {
 		signOut(history);
 	};
 
@@ -35,23 +35,47 @@ export default function ButtonAppBar() {
 					{wallet && (
 						<div className="d-flex justify-content-end align-items-center">
 							{isUserLoggedIn ? (
-								<Nav activeKey="/home">
-									<Nav.Item>
-										<Nav.Link as={Link} to="/frontend">
-											Դրամապանակ
-										</Nav.Link>
-									</Nav.Item>
-									<Nav.Item>
-										<Nav.Link as={Link} to="/frontend/withdrawal-history">
-											Գործարքներ
-										</Nav.Link>
-									</Nav.Item>
-									{/*<Nav.Item>*/}
-									{/*	<Nav.Link as={Link} to="/settings">*/}
-									{/*		Կարգավորումներ*/}
-									{/*	</Nav.Link>*/}
-									{/*</Nav.Item>*/}
-								</Nav>
+
+								<Dropdown>
+									<Dropdown.Toggle variant="primary" id="dropdown-basic">
+										Մենյու
+									</Dropdown.Toggle>
+
+									<Dropdown.Menu alignRight>
+										<Dropdown.Item as={Link} to="/frontend" >Դրամապանակ</Dropdown.Item>
+										<Dropdown.Item as={Link} to="/frontend/withdrawal-history" >Գործարքներ</Dropdown.Item>
+										<Dropdown.Item as={Link} to="/frontend/settings" >Կարգավորումներ</Dropdown.Item>
+										<Dropdown.Item as={Link} to="/frontend/my-services" >Ծառայություններ</Dropdown.Item>
+										<Dropdown.Item onClick={handleSignOutClick} >Ելք</Dropdown.Item>
+									</Dropdown.Menu>
+								</Dropdown>
+								// <Nav activeKey="/home">
+								// 	<Nav.Item>
+								// 		<Nav.Link as={Link} to="/frontend">
+								// 			Դրամապանակ
+								// 		</Nav.Link>
+								// 	</Nav.Item>
+								// 	<Nav.Item>
+								// 		<Nav.Link as={Link} to="/frontend/withdrawal-history">
+								// 			Գործարքներ
+								// 		</Nav.Link>
+								// 	</Nav.Item>
+								// 	<Nav.Item>
+								// 		<Nav.Link as={Link} to="/frontend/settings">
+								// 			Կարգավորումներ
+								// 		</Nav.Link>
+								// 	</Nav.Item>
+								// 	<Nav.Item>
+								// 		<Nav.Link as={Link} to="/frontend/my-services">
+								// 			Ծառայություններ
+								// 		</Nav.Link>
+								// 	</Nav.Item>
+								// 	<Nav.Item>
+								// 		<Nav.Link onClick={handleSignOutClick}>
+								// 			Ելք
+								// 		</Nav.Link>
+								// 	</Nav.Item>
+								// </Nav>
 							) : (
 								''
 							)}

@@ -19,12 +19,12 @@ export const signIn = (store, body, history) => {
 		});
 };
 
-export const signUp = (store, body, history) => {
+export const signUp = (store, body, history, isSimpleReg) => {
 	store.setState({ loader: true });
+
 	axios
 		.post(`https://pelicanbrowser.com/webapi/register`, body)
 		.then(res => {
-			// console.log(res.data);
 			store.setState({
 				user: {
 					id: res.data.user_id,
@@ -36,22 +36,34 @@ export const signUp = (store, body, history) => {
 				loader: false
 			});
 
-			history.push('/frontend/activation-code');
+			localStorage.setItem('user_id', res.data.user_id);
+
+			history.push({ pathname: '/frontend/activation-code', state: { isSimpleReg, isFromSignUp: true } });
 		})
 		.catch(err => {
-			store.setState({ errorMessage: err.response.data.message, loader: false });
+			store.setState({
+				errorMessage: err.response.status === 500 ? err.response.data : err.response.data.message,
+				loader: false
+			});
 		});
 };
 
-export const activate = (store, body, history) => {
+export const activate = (store, body, history, isSimpleReg) => {
 	axios
 		.post(`https://pelicanbrowser.com/webapi/activate`, body)
 		.then(res => {
-			if (res.status === 200) {
-				history.push('/frontend');
-			}
-			store.setState({ errorMessage: '' });
-			// localStorage.setItem('token', res.data.response);
+			localStorage.setItem('api_key', res.data.api_key);
+			localStorage.setItem('user_id', res.data.user_id);
+
+			store.setState({ successActivateMessage: res.data.message, isUserLoggedIn: true, errorMessage: '' });
+
+			setTimeout(() => {
+				store.setState({ successActivateMessage: '' });
+			}, 5000);
+
+			isSimpleReg
+				? history.push('/frontend')
+				: history.push({ pathname: '/frontend/summary', state: { isFromWithdrawalOrActivate: true } });
 		})
 		.catch(err => {
 			store.setState({ errorMessage: err.response.data.message });
@@ -94,26 +106,62 @@ export const forgotPassword = (store, body) => {
 		});
 };
 
-export const withdrawal = (store, body) => {
+export const withdrawal = (store, body, history) => {
+	store.setState({ loader: true });
 	axios
 		.post(`https://pelicanbrowser.com/webapi/withdrawals`, body)
 		.then(res => {
-			console.log(res);
-			// localStorage.setItem('token', res.data.response);
+			store.setState({ successWithdrawalMessage: res.data.message, loader: false });
+
+			setTimeout(() => {
+				store.setState({ successWithdrawalMessage: '' });
+			}, 5000);
+
+			history.push({ pathname: '/frontend', state: { res: res.data, isFromWithdrawalOrActivate: true } });
 		})
 		.catch(err => {
 			alert(err);
 		});
 };
 
-export const getWallet = (store, body) => {
+export const getWallet = (store, body, history) => {
 	store.setState({ loader: true });
 	axios
-		.post(`https://pelicanbrowser.com/webapi/wallet`, body)
+		.post(`https://pelicanbrowser.com/webapi/wallet`, body, {
+			headers: {
+				'X-API-Key': localStorage.getItem('api_key')
+			}
+		})
 		.then(res => {
-			store.setState({ wallet: res.data, loader: false, isUserLoggedIn: !!!res.data.guestMode});
+			store.setState({ wallet: res.data, loader: false, isUserLoggedIn: !!!res.data.guestMode });
+			// !!res.data.guestMode && history.push('/frontend/sign-in');
 		})
 		.catch(err => {
 			store.setState({ errorMessage: err.response.message, loader: false, isUserLoggedIn: false });
+		});
+};
+
+export const addService = (store, body) => {
+	store.setState({ loader: true });
+
+	const request = axios.post(`https://pelicanbrowser.com/webapi/services`, body, {
+		headers: {
+			'X-API-Key': localStorage.getItem('api_key'),
+			'X-USER-ID': localStorage.getItem('user_id')
+		}
+	});
+
+	return request
+		.then(res => {
+			store.setState({ loader: false, successMessage: res.data.message });
+
+			setTimeout(() => {
+				store.setState({ successMessage: '' });
+			}, 5000);
+
+			return res;
+		})
+		.catch(err => {
+			store.setState({ errorMessage: err.response.message, loader: false });
 		});
 };

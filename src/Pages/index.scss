@@ -4,6 +4,10 @@ $info: #6c757d;
 $link-color: $secondary;
 $input-btn-focus-box-shadow: none;
 $input-btn-focus-width: 0;
+$nav-tabs-border-color: transparent;
+$nav-tabs-link-active-border-color: transparent;
+$nav-tabs-link-active-bg: transparent;
+$nav-tabs-link-active-color: #fff;
 
 $primary-gradient: linear-gradient(90deg, $primary, $secondary);
 
@@ -49,5 +53,54 @@ $font-family-base: 'Montserrat', sans-serif;
 .justify-content-between {
 	&:last-of-type {
 		border: none;
+	}
+}
+
+.nav-tabs {
+	.nav-link {
+		width: 50%;
+		margin-bottom: $spacer * 2;
+		text-align: center;
+
+		&:hover {
+			border-color: transparent;
+		}
+	}
+	.nav-link.active,
+	.nav-item.show .nav-link {
+		background-color: transparent;
+		background-image: $primary-gradient;
+	}
+}
+
+.form-group {
+	margin-bottom: $spacer * 2;
+}
+
+.divider {
+	border-top: 1px solid $list-group-border-color;
+	margin-bottom: $spacer * 2;
+	margin-top: 0;
+}
+
+.spinner {
+	min-height: 400px;
+}
+
+.table {
+	th,
+	td {
+		padding: 2rem 0.75rem;
+	}
+	thead th {
+		vertical-align: top;
+		border: none;
+	}
+}
+
+.form-control {
+	&.is-invalid,
+	&.is-valid {
+		background-image: none;
 	}
 }

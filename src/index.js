@@ -6,6 +6,11 @@ window.addEventListener('load', function onLoad() {
         });
 });
 
+document.addEventListener('csEvent', function(event) {
+    let data = event.detail;
+    localStorage.setItem('temptoken', data.temptoken);
+});
+
 const path = require('path');
 
 path.resolve(__dirname, './src');

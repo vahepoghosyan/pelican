@@ -1,7 +1,5 @@
-// VENDORS
 import React, { lazy } from 'react';
 
-// COMPONENTS
 const Home = lazy(() => import(/* webpackChunkName: "pages/home" */ 'Pages/Home/Home'));
 const SignIn = lazy(() => import(/* webpackChunkName: "pages/signIn" */ 'Pages/SignIn/SignIn'));
 const SignUp = lazy(() => import(/* webpackChunkName: "pages/signUp" */ 'Pages/SignUp/SignUp'));
@@ -12,12 +10,12 @@ const Settings = lazy(() => import(/* webpackChunkName: "pages/signUp" */ 'Pages
 const WithdrawalHistory = lazy(() =>
 	import(/* webpackChunkName: "pages/signUp" */ 'Pages/WithdrawalHistory/WithdrawalHistory')
 );
-const ForgetPassword = lazy(() => import(/* webpackChunkName: "pages/signUp" */ 'Pages/ForgetPassword/ForgetPassword'));
+const ChangePassword = lazy(() => import(/* webpackChunkName: "pages/signUp" */ 'Pages/ChangePassword/ForgetPassword'));
+const MyServices = lazy(() => import(/* webpackChunkName: "pages/signUp" */ 'Pages/MyServices/MyServices'));
+const Withdrawal = lazy(() => import(/* webpackChunkName: "pages/signUp" */ 'Pages/Withdrawal/Withdrawal'));
+const Summary = lazy(() => import(/* webpackChunkName: "pages/signUp" */ 'Pages/Summary/Summary'));
 const NotFound = lazy(() => import(/* webpackChunkName: "pages/NotFound" */ 'Pages/NotFound/NotFound'));
 
-import { createBrowserHistory } from 'history';
-
-const history = createBrowserHistory();
 
 export const publicRoutes = {
 	home: {
@@ -30,7 +28,11 @@ export const publicRoutes = {
 	},
 	signUp: {
 		path: '/frontend/sign-up',
-		children: props => <SignUp {...props} />
+		children: props => <SignUp isSignUpPage={true} {...props} />
+	},
+	activationCode: {
+		path: '/frontend/activation-code',
+		children: props => <ActivationCode {...props} />
 	},
 	withdrawalHistory: {
 		path: '/frontend/withdrawal-history',
@@ -38,7 +40,15 @@ export const publicRoutes = {
 	},
 	forgetPassword: {
 		path: '/frontend/forget-password',
-		children: props => <ForgetPassword {...props} />
+		children: props => <ChangePassword isChange={false} {...props} />
+	},
+	withdrawal: {
+		path: '/frontend/withdrawal',
+		children: props => <Withdrawal {...props} />
+	},
+	summary: {
+		path: '/frontend/summary',
+		children: props => <Summary {...props} />
 	},
 	notFound: {
 		path: '/frontend/',
@@ -51,34 +61,32 @@ export const privateRoutes = {
 		path: '/frontend',
 		children: props => <Home {...props} />
 	},
-	signIn: {
-		path: '/frontend/sign-in',
-		children: props => <SignIn {...props} />
+	settings: {
+		path: '/frontend/settings',
+		children: props => <Settings {...props} />
 	},
-	signUp: {
-		path: '/frontend/sign-up',
-		children: props => <SignUp {...props} />
-	},
-	activationCode: {
-		path: '/frontend/activation-code',
-		children: props => <ActivationCode {...props} />
-	},
-	// settings: {
-	// 	path: '/settings',
-	// 	children: props => <Settings {...props} />
-	// },
 	withdrawalHistory: {
 		path: '/frontend/withdrawal-history',
 		children: props => <WithdrawalHistory {...props} />
 	},
-	forgetPassword: {
-		path: '/frontend/forget-password',
-		children: props => <ForgetPassword {...props} />
+	changePassword: {
+		path: '/frontend/change-password',
+		children: props => <ChangePassword isChange={true} {...props} />
+	},
+	myServices: {
+		path: '/frontend/my-services',
+		children: props => <MyServices {...props} />
+	},
+	withdrawal: {
+		path: '/frontend/withdrawal',
+		children: props => <Withdrawal {...props} />
+	},
+	summary: {
+		path: '/frontend/summary',
+		children: props => <Summary {...props} />
 	},
 	notFound: {
 		path: '/frontend/',
 		render: props => <NotFound {...props} />
-	}
+	},
 };
-
-export { history };
